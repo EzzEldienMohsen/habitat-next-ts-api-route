@@ -1,4 +1,3 @@
-// src/app/api/profile/route.ts
 import { withAuth } from '@/utils/authWrapper';
 import {
   deleteProfileFromDb,

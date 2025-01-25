@@ -1,11 +1,13 @@
-'use server';
-
-import { ClientUserSchema } from '@/assets/zodValidationSchemas';
+import { ClientAddressSchema } from '@/assets/zodValidationSchemas';
 import { autoFetch } from '@/utils';
 
-export const getProfile = async (authToken: string | undefined) => {
+// Getting a single address
+export const getSingleAddress = async (
+  authToken: string | undefined,
+  id: string
+) => {
   try {
-    const response = await autoFetch('/profile', {
+    const response = await autoFetch(`/address/${id}`, {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
@@ -13,20 +15,31 @@ export const getProfile = async (authToken: string | undefined) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching cart:', error);
-    throw new Error('Failed to get profile');
+    throw new Error('Failed to get the address');
   }
 };
-export const updateProfile = async (
+
+// updating a single address
+export const updateAddress = async (
+  authToken: string | undefined,
   prevState: {
     error?: { field: string; message: string }[];
     success?: boolean;
   },
-  formData: FormData,
-  authToken: string | undefined
+  formData: FormData
 ) => {
-  const data = Object.fromEntries(formData.entries());
+  const id = Number(formData.get('id'));
+  if (isNaN(id)) {
+    return { error: [{ field: 'id', message: 'Invalid address ID' }] };
+  }
+  const address_name = formData.get('address_name') as string;
+  const address_details = formData.get('address_details') as string;
 
-  const validationResult = ClientUserSchema.safeParse(data);
+  const validationResult = ClientAddressSchema.safeParse({
+    address_name,
+    address_details,
+  });
+
   if (!validationResult.success) {
     const errorMap = validationResult.error.format();
     const errors = Object.entries(errorMap).flatMap(([key, value]) => {
@@ -50,31 +63,32 @@ export const updateProfile = async (
 
   try {
     const response = await autoFetch.patch(
-      '/profile',
+      `/address/${id}`,
+      { address_name, address_details },
       {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
-      },
-      data
+      }
     );
     return response.data;
   } catch (error) {
-    console.error('Database Error:', error);
-    return {
-      error: [
-        {
-          field: 'form',
-          message: 'Something went wrong. Please try again.',
-        },
-      ],
-    };
+    console.error('Error fetching cart:', error);
+    throw new Error('Failed to update address');
   }
 };
 
-export const deleteProfile = async (authToken: string | undefined) => {
+// delete address
+
+export const deleteAddress = async (
+  authToken: string | undefined,
+  prevState: { success?: boolean },
+  formData: FormData
+) => {
+  const id = Number(formData.get('id'));
+  if (!id) return { success: false };
   try {
-    const response = await autoFetch.delete('/profile', {
+    const response = await autoFetch.delete(`profile/${id}`, {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
@@ -82,6 +96,6 @@ export const deleteProfile = async (authToken: string | undefined) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching cart:', error);
-    throw new Error('Failed to delete profile');
+    throw new Error('Failed to delete address');
   }
 };
