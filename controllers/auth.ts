@@ -106,10 +106,10 @@ export const verifyAuth = async (token: string | null | undefined) => {
   if (!decoded) return { user: null };
 
   // Fetch the user from the database
-  const user = await pool.query('SELECT * FROM clientUser WHERE id =$1', [
+  const userResult = await pool.query('SELECT * FROM clientUser WHERE id =$1', [
     decoded.userId,
   ]);
-
+  const user = userResult.rows[0];
   return { user: user || null };
 };
 
