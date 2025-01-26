@@ -1,3 +1,4 @@
+'use server';
 import { ClientAddressSchema } from '@/assets/zodValidationSchemas';
 import { autoFetch } from '@/utils';
 
@@ -11,7 +12,7 @@ export const getAllAddresses = async (authToken: string | undefined) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching cart:', error);
+    console.error('Error fetching address:', error);
     throw new Error('Failed to get addresses');
   }
 };
@@ -64,7 +65,7 @@ export const createAddress = async (
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching cart:', error);
+    console.error('Error creating address', error);
     throw new Error('Failed to create address');
   }
 };

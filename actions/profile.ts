@@ -12,7 +12,7 @@ export const getProfile = async (authToken: string | undefined) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching cart:', error);
+    console.error('Error fetching profile:', error);
     throw new Error('Failed to get profile');
   }
 };

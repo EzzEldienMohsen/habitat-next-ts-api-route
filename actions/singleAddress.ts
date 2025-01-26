@@ -1,3 +1,4 @@
+'use server';
 import { ClientAddressSchema } from '@/assets/zodValidationSchemas';
 import { autoFetch } from '@/utils';
 
@@ -14,7 +15,7 @@ export const getSingleAddress = async (
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching cart:', error);
+    console.error('Error fetching address:', error);
     throw new Error('Failed to get the address');
   }
 };
@@ -73,7 +74,7 @@ export const updateAddress = async (
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching cart:', error);
+    console.error('Error updating address:', error);
     throw new Error('Failed to update address');
   }
 };
@@ -95,7 +96,7 @@ export const deleteAddress = async (
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching cart:', error);
+    console.error('Error deleting address:', error);
     throw new Error('Failed to delete address');
   }
 };
