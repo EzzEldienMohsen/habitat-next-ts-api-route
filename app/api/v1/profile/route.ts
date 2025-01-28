@@ -22,5 +22,5 @@ export const PATCH = (req: NextRequest) =>
 export const DELETE = (req: NextRequest) =>
   withAuth(req, async (userId) => {
     await deleteProfileFromDb(userId);
-    return NextResponse.json({}, { status: 204 });
+    return NextResponse.json({}, { status: 202 });
   });
