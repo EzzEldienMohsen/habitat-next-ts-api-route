@@ -14,6 +14,9 @@ export const addMessage = async (
     return { success: true, message: 'Message sent successfully.' };
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to add the message to the database.');
+    return {
+      success: false,
+      message: 'could not send the message please try again later.',
+    };
   }
 };

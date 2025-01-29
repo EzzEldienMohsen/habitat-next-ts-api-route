@@ -13,7 +13,8 @@ export const getProducts = async ({
   category?: string;
   latest?: boolean;
 }): Promise<{
-  products: Products;
+  products: Products | [];
+  message?: string;
   success: boolean;
   totalPages?: number;
   currentPage?: number;
@@ -63,7 +64,11 @@ export const getProducts = async ({
   } catch (error) {
     const err = error as Error;
     console.error('Error fetching products:', err.message);
-    throw new Error('Failed to fetch products.');
+    return {
+      success: false,
+      products: [],
+      message: 'error happened try again later',
+    };
   }
 };
 
@@ -71,7 +76,7 @@ export const getProducts = async ({
 
 export const getProductById = async (
   id: string
-): Promise<{ success: boolean; product: Product }> => {
+): Promise<{ success: boolean; product: Product | []; message?: string }> => {
   try {
     const result = await pool.query('SELECT * FROM products WHERE id = $1', [
       Number(id),
@@ -81,6 +86,10 @@ export const getProductById = async (
   } catch (error) {
     const err = error as Error;
     console.error('Error fetching products:', err.message);
-    throw new Error('Failed to fetch products.');
+    return {
+      success: false,
+      product: [],
+      message: 'error happened try again later',
+    };
   }
 };

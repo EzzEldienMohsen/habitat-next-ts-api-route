@@ -11,7 +11,7 @@ export const getAddressFromDb = async (clientId: number, id: number) => {
   } catch (error) {
     const err = error as Error;
     console.error('Error fetching address:', err.message);
-    throw new Error('Failed to fetch address.');
+    return { success: false, data: [], message: 'failed to fetch addresses' };
   }
 };
 
@@ -35,7 +35,10 @@ export const updateAddressInDb = async (
   } catch (error) {
     const err = error as Error;
     console.error('Error fetching address:', err.message);
-    throw new Error('Failed to fetch address.');
+    return {
+      success: false,
+      message: 'Failed to update address, try again later',
+    };
   }
 };
 
@@ -53,6 +56,9 @@ export const deleteAddressFromDb = async (clientId: number, id: number) => {
   } catch (error) {
     const err = error as Error;
     console.error('Error deleting address:', err.message);
-    throw new Error('Failed to deleteAddress.');
+    return {
+      success: false,
+      message: 'Failed to delete address, try again later',
+    };
   }
 };
