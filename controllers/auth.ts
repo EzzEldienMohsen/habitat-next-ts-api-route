@@ -3,6 +3,7 @@ import { hashUserPassword, verifyPassword } from '@/utils/hash';
 import { generateToken, verifyToken } from '@/utils/jwtUtils';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
 // signing up
 export const addUser = async (
@@ -41,14 +42,10 @@ export const addUser = async (
     };
   } catch (error) {
     console.error('Database Error:', error);
-    return {
-      error: [
-        {
-          field: 'form',
-          message: 'Something went wrong. Please try again.',
-        },
-      ],
-    };
+    return NextResponse.json(
+      { success: false, message: 'error happened try again latter' },
+      { status: 500 }
+    );
   }
 };
 
@@ -61,11 +58,10 @@ export const checkUser = async (email: string, password: string) => {
     );
     const user = loggingResult.rows[0];
     if (!user || !verifyPassword(user.password, password)) {
-      return {
-        error: [
-          { field: 'email', message: 'This Email is Not Registered yet' },
-        ],
-      };
+      return NextResponse.json(
+        { success: false, message: 'unauthenticated' },
+        { status: 401 }
+      );
     }
 
     const token = generateToken(user.id);
@@ -88,14 +84,10 @@ export const checkUser = async (email: string, password: string) => {
     };
   } catch (error) {
     console.error('Database Error:', error);
-    return {
-      error: [
-        {
-          field: 'form',
-          message: 'Something went wrong. Please try again.',
-        },
-      ],
-    };
+    return NextResponse.json(
+      { success: false, message: 'error happened try again latter' },
+      { status: 500 }
+    );
   }
 };
 
