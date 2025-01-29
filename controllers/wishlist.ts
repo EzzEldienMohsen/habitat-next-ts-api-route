@@ -7,7 +7,7 @@ export const getAllWishlist = async (userId: number) => {
   try {
     const wishlist = await fetchWishlistByClientId(userId);
     if (!wishlist) {
-      return { items: [], totalItems: 0 };
+      return { success: true, items: [], totalItems: 0 };
     }
     const wishlistItems = await pool.query(
       'SELECT * FROM wishlist_items WHERE wishlist_id = $1',
@@ -20,7 +20,11 @@ export const getAllWishlist = async (userId: number) => {
     };
   } catch (error) {
     console.error('Error fetching wishlist:', error);
-    throw new Error('Failed to get wishlist');
+    return {
+      success: false,
+      totalItems: 0,
+      items: [],
+    };
   }
 };
 
@@ -57,7 +61,7 @@ export const addItemToWishlist = async (
     return { success: true, message: 'added to wishlist' };
   } catch (error) {
     console.error('Error adding to wishlist:', error);
-    throw new Error('Failed to add to wishlist');
+    return { success: false, message: 'could not add to wishlist' };
   }
 };
 export const clearWishlist = async (userId: number) => {
@@ -68,7 +72,7 @@ export const clearWishlist = async (userId: number) => {
     return { success: true, message: 'Cart cleared successfully' };
   } catch (error) {
     console.error('Error clearing wishlist:', error);
-    throw new Error('Failed to clear wishlist');
+    return { success: false, message: 'could not clear the cart' };
   }
 };
 
@@ -78,7 +82,7 @@ export const removeItemFromWishlist = async (userId: number, id: number) => {
     if (!wishlist) {
       return {
         success: false,
-        error: [{ field: 'general', message: 'Wishlist not found' }],
+        message: 'Wishlist not found',
       };
     }
     await pool.query(
@@ -90,6 +94,6 @@ export const removeItemFromWishlist = async (userId: number, id: number) => {
     return { success: true, message: 'item removed successfully' };
   } catch (error) {
     console.error('Error removing item form wishlist:', error);
-    throw new Error('Failed to remove item form wishlist');
+    return { success: false, message: 'Could not remove item try again later' };
   }
 };

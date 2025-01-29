@@ -3,7 +3,7 @@
 import { ClientUserSchema } from '@/assets/zodValidationSchemas';
 import { autoFetch } from '@/utils';
 
-export const getProfile = async (authToken: string | undefined) => {
+export const getProfile = async (authToken?: string) => {
   try {
     const response = await autoFetch('/profile', {
       headers: {
@@ -22,7 +22,7 @@ export const updateProfile = async (
     success?: boolean;
   },
   formData: FormData,
-  authToken: string | undefined
+  authToken?: string
 ) => {
   const data = Object.fromEntries(formData.entries());
 
@@ -72,7 +72,7 @@ export const updateProfile = async (
   }
 };
 
-export const deleteProfile = async (authToken: string | undefined) => {
+export const deleteProfile = async (authToken?: string) => {
   try {
     const response = await autoFetch.delete('/profile', {
       headers: {

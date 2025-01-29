@@ -45,7 +45,11 @@ export const getAllCartItemsFromDb = async (id: number) => {
     return { success: true, data };
   } catch (error) {
     console.error('Error fetching cart:', error);
-    throw new Error('Failed to get cart');
+    return {
+      success: false,
+      data: [],
+      message: 'error happened try again later',
+    };
   }
 };
 

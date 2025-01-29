@@ -2,7 +2,7 @@
 import { ProductToAddToCart } from '@/assets/types';
 import { autoFetch } from '@/utils';
 
-export const getAllCartItems = async (authToken: string | undefined) => {
+export const getAllCartItems = async (authToken?: string) => {
   try {
     const response = await autoFetch('/cart', {
       headers: {
@@ -17,8 +17,8 @@ export const getAllCartItems = async (authToken: string | undefined) => {
 };
 
 export const addToCart = async (
-  authToken: string | undefined,
-  cartData: ProductToAddToCart
+  cartData: ProductToAddToCart,
+  authToken?: string
 ) => {
   try {
     const response = await autoFetch.post('/cart', cartData, {
@@ -33,7 +33,7 @@ export const addToCart = async (
   }
 };
 
-export const clearCart = async (authToken: string | undefined) => {
+export const clearCart = async (authToken?: string) => {
   try {
     const response = await autoFetch.delete('/cart', {
       headers: {

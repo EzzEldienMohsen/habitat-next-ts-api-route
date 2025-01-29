@@ -3,7 +3,7 @@ import { ClientAddressSchema } from '@/assets/zodValidationSchemas';
 import { autoFetch } from '@/utils';
 
 // Getting all the addresses
-export const getAllAddresses = async (authToken: string | undefined) => {
+export const getAllAddresses = async (authToken?: string) => {
   try {
     const response = await autoFetch('/address', {
       headers: {
@@ -18,12 +18,12 @@ export const getAllAddresses = async (authToken: string | undefined) => {
 };
 // creating addresses
 export const createAddress = async (
-  authToken: string | undefined,
   prevState: {
     error?: { field: string; message: string }[];
     success?: boolean;
   },
-  formData: FormData
+  formData: FormData,
+  authToken?: string
 ) => {
   const address_name = formData.get('address_name') as string;
   const address_details = formData.get('address_details') as string;

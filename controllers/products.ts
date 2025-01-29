@@ -14,6 +14,7 @@ export const getProducts = async ({
   latest?: boolean;
 }): Promise<{
   products: Products;
+  success: boolean;
   totalPages?: number;
   currentPage?: number;
 }> => {
@@ -51,13 +52,14 @@ export const getProducts = async ({
 
       return {
         products,
+        success: true,
         totalPages,
         currentPage,
       };
     }
 
     // Return products for the "latest" case
-    return { products };
+    return { success: true, products };
   } catch (error) {
     const err = error as Error;
     console.error('Error fetching products:', err.message);
@@ -69,13 +71,13 @@ export const getProducts = async ({
 
 export const getProductById = async (
   id: string
-): Promise<{ product: Product }> => {
+): Promise<{ success: boolean; product: Product }> => {
   try {
     const result = await pool.query('SELECT * FROM products WHERE id = $1', [
       Number(id),
     ]);
     const product = result.rows[0] as Product;
-    return { product };
+    return { success: true, product };
   } catch (error) {
     const err = error as Error;
     console.error('Error fetching products:', err.message);

@@ -3,14 +3,15 @@
 import { CartProduct, Product } from '@/assets/types';
 import { autoFetch } from '@/utils';
 
-export const getWishList = async (authToken: string | undefined) => {
+export const getWishList = async (authToken?: string) => {
   try {
     const response = await autoFetch('/wishlist', {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
     });
-    return response.data;
+    console.log(response);
+    return response;
   } catch (error) {
     console.error('Error fetching wishlist:', error);
     throw new Error('Failed to get wishlist');
@@ -18,8 +19,8 @@ export const getWishList = async (authToken: string | undefined) => {
 };
 
 export const addToWishlist = async (
-  authToken: string | undefined,
-  wishlistData: Product | CartProduct
+  wishlistData: Product | CartProduct,
+  authToken?: string
 ) => {
   try {
     const response = await autoFetch.post('/wishlist', wishlistData, {
@@ -34,7 +35,7 @@ export const addToWishlist = async (
   }
 };
 
-export const clearWishList = async (authToken: string | undefined) => {
+export const clearWishList = async (authToken?: string) => {
   try {
     const response = await autoFetch.delete('/wishlist', {
       headers: {
@@ -47,10 +48,7 @@ export const clearWishList = async (authToken: string | undefined) => {
     throw new Error('Failed to delete wishlist');
   }
 };
-export const removeWishlistItem = async (
-  authToken: string | undefined,
-  id: number
-) => {
+export const removeWishlistItem = async (id: number, authToken?: string) => {
   try {
     const response = await autoFetch.delete(`/wishlist/${id}`, {
       headers: {

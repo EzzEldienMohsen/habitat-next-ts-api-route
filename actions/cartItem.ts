@@ -3,9 +3,9 @@
 import { autoFetch } from '@/utils';
 
 export const updateCartItem = async (
-  authToken: string | undefined,
   id: number,
-  newAmount: number
+  newAmount: number,
+  authToken?: string
 ) => {
   try {
     const response = await autoFetch.patch(
@@ -26,10 +26,7 @@ export const updateCartItem = async (
   }
 };
 
-export const removeCartItem = async (
-  authToken: string | undefined,
-  id: number
-) => {
+export const removeCartItem = async (id: number, authToken?: string) => {
   try {
     const response = await autoFetch.delete(
       `/cart/${id}`,

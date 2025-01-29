@@ -10,7 +10,11 @@ export const getAllAddressesFromDb = async (id: number) => {
   } catch (error) {
     const err = error as Error;
     console.error('Error fetching addresses:', err.message);
-    throw new Error('Failed to fetch addresses.');
+    return {
+      success: false,
+      data: [],
+      message: 'error happened please try again',
+    };
   }
 };
 
@@ -32,6 +36,10 @@ export const createAddressInDb = async (
   } catch (error) {
     const err = error as Error;
     console.error('Error adding address:', err.message);
-    throw new Error('Failed to add address.');
+    return {
+      success: false,
+      message: 'could not add address please try again later',
+      data: [],
+    };
   }
 };

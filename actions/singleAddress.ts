@@ -3,10 +3,7 @@ import { ClientAddressSchema } from '@/assets/zodValidationSchemas';
 import { autoFetch } from '@/utils';
 
 // Getting a single address
-export const getSingleAddress = async (
-  authToken: string | undefined,
-  id: string
-) => {
+export const getSingleAddress = async (id: string, authToken?: string) => {
   try {
     const response = await autoFetch(`/address/${id}`, {
       headers: {
@@ -22,12 +19,12 @@ export const getSingleAddress = async (
 
 // updating a single address
 export const updateAddress = async (
-  authToken: string | undefined,
   prevState: {
     error?: { field: string; message: string }[];
     success?: boolean;
   },
-  formData: FormData
+  formData: FormData,
+  authToken?: string
 ) => {
   const id = Number(formData.get('id'));
   if (isNaN(id)) {
@@ -82,9 +79,9 @@ export const updateAddress = async (
 // delete address
 
 export const deleteAddress = async (
-  authToken: string | undefined,
   prevState: { success?: boolean },
-  formData: FormData
+  formData: FormData,
+  authToken?: string
 ) => {
   const id = Number(formData.get('id'));
   if (!id) return { success: false };

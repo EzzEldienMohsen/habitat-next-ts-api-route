@@ -1,4 +1,5 @@
 import { verifyAuth } from '@/controllers/auth';
+import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const withAuth = async (
@@ -6,7 +7,9 @@ export const withAuth = async (
   handler: (userId: number) => Promise<NextResponse>
 ): Promise<NextResponse> => {
   try {
-    let token = req.cookies.get('auth_token')?.value;
+    const cookieStore = await cookies();
+    let token = cookieStore.get('auth_token')?.value;
+
     if (!token) {
       const authHeader = req.headers.get('Authorization');
       if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -18,12 +21,8 @@ export const withAuth = async (
     if (!authResult.user) {
       return NextResponse.json(
         {
-          error: [
-            {
-              field: 'auth',
-              message: 'Unauthorized',
-            },
-          ],
+          success: false,
+          message: 'unauthorized access please sign in and try again',
         },
         { status: 401 }
       );
